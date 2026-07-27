@@ -1,0 +1,23 @@
+{
+    "scenes":  [
+                   {
+                       "id":  "1",
+                       "characters":  [
+                                          "Mara"
+                                      ]
+                   },
+                   {
+                       "id":  "2",
+                       "characters":  [
+                                          "Mara",
+                                          "Ivo"
+                                      ]
+                   },
+                   {
+                       "id":  "3",
+                       "characters":  [
+                                          "Ivo"
+                                      ]
+                   }
+               ]
+}
