@@ -15,23 +15,56 @@ def _require(data: dict[str, Any], key: str) -> Any:
 
 def _scene_presence(data: dict[str, Any]) -> dict[str, Any]:
     scenes = _require(data, "scenes")
+    if not isinstance(scenes, list):
+        raise TypeError("scenes must be a list")
     ids = [str(scene.get("id", "")) for scene in scenes]
     if any(not item for item in ids) or len(ids) != len(set(ids)):
         raise ValueError("scenes need unique non-empty ids")
     prior: set[str] = set()
     rows = []
+    summaries: dict[str, dict[str, Any]] = {}
+    warnings = []
     for scene in scenes:
+        if not isinstance(scene.get("characters", []), list):
+            raise TypeError("scene characters must be a list")
         present = set(map(str, scene.get("characters", [])))
+        entered = sorted(present - prior)
+        exited = sorted(prior - present)
         rows.append(
             {
                 "scene": str(scene["id"]),
                 "present": sorted(present),
-                "entered": sorted(present - prior),
-                "exited": sorted(prior - present),
+                "entered": entered,
+                "exited": exited,
             }
         )
+        if not present:
+            warnings.append({"scene": str(scene["id"]), "warning": "empty character roster"})
+        for name in present | prior:
+            summary = summaries.setdefault(
+                name,
+                {
+                    "scenes_present": 0,
+                    "entrances": 0,
+                    "exits": 0,
+                    "first_scene": None,
+                    "last_scene": None,
+                },
+            )
+            if name in present:
+                summary["scenes_present"] += 1
+                summary["first_scene"] = summary["first_scene"] or str(scene["id"])
+                summary["last_scene"] = str(scene["id"])
+            summary["entrances"] += name in entered
+            summary["exits"] += name in exited
         prior = present
-    return {"characters": sorted({name for row in rows for name in row["present"]}), "scenes": rows}
+    return {
+        "characters": sorted(summaries),
+        "transition_count": sum(len(row["entered"]) + len(row["exited"]) for row in rows),
+        "character_summaries": dict(sorted(summaries.items())),
+        "warnings": warnings,
+        "scenes": rows,
+    }
 
 
 def analyze(data: dict[str, Any]) -> dict[str, Any]:

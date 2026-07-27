@@ -12,7 +12,7 @@ scene-presence examples/sample.json
 scene-presence examples/sample.json --format json --output report.json
 ```
 
-The example documents the complete v1 input shape. Markdown is intended for immediate review; JSON preserves structured evidence for scripts and later comparison. An existing output file is never overwritten.
+The example documents the complete input shape. Version 1.1 adds per-character scene/transition summaries, a total transition count, and explicit warnings for empty scene rosters. Markdown is intended for immediate review; JSON preserves structured evidence for scripts and later comparison. An existing output file is never overwritten.
 
 ## Privacy and platforms
 

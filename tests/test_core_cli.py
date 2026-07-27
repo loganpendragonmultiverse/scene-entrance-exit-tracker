@@ -15,6 +15,9 @@ def test_representative_sample_has_expected_result():
     assert report["version"] == 1
     assert report["project"] == PROJECT
     assert report["scenes"][1]["entered"] == ["Ivo"]
+    assert report["character_summaries"]["Mara"]["scenes_present"] == 2
+    assert report["character_summaries"]["Ivo"]["first_scene"] == "2"
+    assert report["transition_count"] == 3
     assert f'"project": "{PROJECT}"' in render_json(report)
     assert PROJECT.replace("-", " ").title() in render_markdown(report)
 
@@ -22,6 +25,14 @@ def test_representative_sample_has_expected_result():
 def test_missing_required_input_is_rejected():
     with pytest.raises(ValueError):
         analyze({})
+
+
+def test_empty_scenes_are_flagged_and_character_lists_validated():
+    report = analyze({"scenes": [{"id": "one", "characters": ["Mara"]}, {"id": "two"}]})
+    assert report["warnings"] == [{"scene": "two", "warning": "empty character roster"}]
+    assert report["character_summaries"]["Mara"]["exits"] == 1
+    with pytest.raises(TypeError, match="characters"):
+        analyze({"scenes": [{"id": "one", "characters": "Mara"}]})
 
 
 def test_cli_json_and_output_safety(tmp_path, capsys):
