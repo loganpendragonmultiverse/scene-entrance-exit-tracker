@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.2.2 - 2026-10-20
+
+- Reject malformed roots, scenes and ambiguous character identities before transition analysis.
+- Preserve duplicate-roster evidence by refusing duplicate identities instead of collapsing them.
+- Create reports exclusively and ship authority documents plus the representative example.
+
 ## 1.2.1
 
 - Correct released documentation labels; package behavior is unchanged.

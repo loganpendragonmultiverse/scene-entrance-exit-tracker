@@ -9,3 +9,12 @@ Preserve deterministic, source-safe behavior and the interpretation boundary doc
 ## 1.2.0
 
 Each scene may supply ordered `events`, for example `[{"action":"exit","character":"Mara"},{"action":"enter","character":"Ivo"}]`. `characters` is the initial roster; events produce `end_present`, which becomes the prior roster for the next scene. Entering a present character or exiting an absent one is rejected. Re-entry after an exit is valid. Summaries count each transition and each scene occupied at least once; `present` remains the initial roster. Omitted events retain legacy output.
+
+## Identity and packaging contract
+
+Validate roots, scene objects, unique scene IDs and initial rosters before
+computing transitions. Preserve exact authored case-sensitive identities and reject
+blank or padded identities. Events may re-enter after an exit but must never
+invent an entrance or exit from a malformed value. Keep initial roster evidence
+separate from end-of-scene state. Include four authority documents and the
+representative JSON example in wheel and source distributions.
