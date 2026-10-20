@@ -46,3 +46,22 @@ Each scene may supply ordered `events`, for example `[{"action":"exit","characte
 ## Version 1.2.1: documentation correction
 
 Version 1.2.0 was released on October 15, 2026. Version 1.2.1 corrects its release labels without changing behavior. The original v1.2.0 tag and downloadable artifacts remain unchanged; use v1.2.1 for the corrected packaged documentation.
+
+## Explicit identities (1.2.2)
+
+Scene IDs and character names must be nonempty strings with no surrounding
+whitespace. Names are case-sensitive; duplicate names within one initial roster
+are rejected rather than silently collapsed. Event identities follow the same
+rules, so malformed or padded identities are refused. Names remain explicit and
+case-sensitive; spelling and identity resolution are the author's responsibility.
+Malformed roots and scene records produce actionable errors. Ordered re-entry,
+initial rosters, end rosters and prior-scene transitions retain their documented
+meaning. Output files are created exclusively.
+
+Installed packages include documents and `examples/sample.json` under
+`share/doc/scene-entrance-exit-tracker/` in the Python environment, whose root
+is printed by `python -c "import sys; print(sys.prefix)"`.
+
+Existing output paths, including dangling symbolic links, are refused before
+exclusive file creation. This protects ordinary output collisions; it does not
+promise protection against hostile concurrent file-system changes.
